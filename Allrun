@@ -1,0 +1,60 @@
+#!/bin/sh
+cd ${0%/*} || exit 1    # Run from this directory
+
+# Source tutorial run functions
+. $WM_PROJECT_DIR/bin/tools/RunFunctions
+
+application=$(getApplication)
+
+#-----------------------------------------------------------------------------#
+rm -r *.tar
+tar cfv case_.tar *
+
+#-----------------------------------------------------------------------------#
+#Meshing
+
+#blockMesh
+runApplication blockMesh
+touch blockMesh.foam
+
+#SHM
+runApplication snappyHexMesh -overwrite
+touch SHM.foam
+
+#Mesh quality
+runApplication checkMesh
+# runApplication renumberMesh 
+
+#-----------------------------------------------------------------------------#
+#Singlethreading
+
+runApplication setFields
+runApplication $application
+
+#-----------------------------------------------------------------------------#
+#Multithreading
+
+# runApplication decomposePar -copyZero
+
+# runParallel setFields
+# runParallel $application
+
+# runApplication reconstructParMesh -constant -latestTime #-mergeTol 1e-6
+# runApplication reconstructPar -latestTime
+
+#-----------------------------------------------------------------------------#
+#Generate VTK & FOAM Files
+runApplication foamToVTK -ascii -latestTime
+touch solution.foam
+
+#-----------------------------------------------------------------------------#
+#Data-output
+
+tail -20 log.interFoam | grep Execution >> res.txt
+echo "deltaT" >> deltaT.txt
+echo "Time" >> Time.txt
+
+grep "deltaT" log.interFoam | cut -d "=" -f2 | tr -d "[:blank:]" >> deltaT.txt
+grep -w "Time" log.interFoam | cut -d "=" -f2 | tr -d "[:blank:]" >> Time.txt
+grep -v ":" Time.txt > tmp.txt
+mv tmp.txt Time.txt

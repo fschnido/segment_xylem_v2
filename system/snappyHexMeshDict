@@ -1,0 +1,163 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+  =========                 |
+  \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
+   \\    /   O peration     | Website:  https://openfoam.org
+    \\  /    A nd           | Version:  9
+     \\/     M anipulation  |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+	version		2.0;
+	format		ascii;
+	class		dictionary;
+	location	"system";
+	object		snappyHexMeshDict;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+//Einstellparameter
+surfaceRefinementLevel	0;
+nCellsBetween			1;
+refinementBoxLevel		0;
+surfaceLayers			3;
+
+//Allgemeine Netzeinstellungen
+castellatedMesh	true;
+snap			true;
+addLayers		false;
+
+
+//---------------------------------------------------------------------------------------------------------//
+geometry
+{
+	refinementBox
+	{
+	//--------------------------------------//
+		type searchableBox;
+		min (-0.001  -0.001 -0.001);
+		max ( 0.002   0.03 	 0.002);
+//--------------------------------------//
+	}
+	walls
+	{
+		//Ebene definiert durch Basispunkt und Normalenvektor
+		//siehe: https://www.openfoam.com/documentation/guides/latest/doc/guide-meshing-snappyhexmesh-searchableplane.html
+		type searchablePlane;
+		planeType pointAndNormal;
+		pointAndNormalDict
+		{
+			basePoint (0 0 0); //orig (0.005 0 0)
+			normalVector (1 0 0);
+		}
+	}
+};
+
+//---------------------------------------------------------------------------------------------------------//
+castellatedMeshControls
+{
+	maxLocalCells			1000000;
+	maxGlobalCells			2000000;
+	minRefinementCells		0;
+
+	nCellsBetweenLevels		$nCellsBetween;
+
+	features
+	(
+	);
+
+	refinementSurfaces
+	{
+		walls
+		{
+			level
+			($surfaceRefinementLevel $surfaceRefinementLevel);
+			patchInfo
+			{
+				type	wall;
+			}
+		}
+	}
+	resolveFeatureAngle		30; //orig 30
+	refinementRegions
+	{
+		refinementBox
+		{
+			mode inside;
+			levels ((1e-4 $refinementBoxLevel));
+		}
+	}
+	
+//--------------------------------------//
+	locationInMesh			(0 0 0.001);   //orig (0 0 0.001)
+//--------------------------------------//
+
+	allowFreeStandingZoneFaces	true;
+}
+
+//---------------------------------------------------------------------------------------------------------//
+snapControls
+{
+	nSmoothPatch			3;
+	tolerance			  1.0;
+	nSolveIter			  100;
+	nRelaxIter			    5;
+	nFeatureSnapIter	   10;
+}
+
+//---------------------------------------------------------------------------------------------------------//
+addLayersControls
+{
+	relativeSizes	true;
+	layers
+	{
+		walls
+		{
+			nSurfaceLayers	$surfaceLayers;
+		}
+	}
+	
+	expansionRatio				 1.5;
+	finalLayerThickness			 0.7;
+	minThickness				0.25;
+	nGrow						   0;
+	featureAngle				  60;
+	nRelaxIter					   5;
+	nSmoothSurfaceNormals		   1;
+	nSmoothNormals				   3;
+	nSmoothThickness			  10;
+	maxFaceThicknessRatio		 0.5;
+	maxThicknessToMedialRatio	 0.3;
+	minMedianAxisAngle			  90;
+	nBufferCellsNoExtrude		   0;
+	nLayerIter					  50;
+	nRelaxedIter				  20;
+}
+
+//---------------------------------------------------------------------------------------------------------//
+meshQualityControls
+{
+	maxNonOrtho					  70;
+	maxBoundarySkewness			  20;
+	maxInternalSkewness			   4;
+	maxConcave					  80;
+	minVol					   1e-13;
+	minTetQuality			   1e-30;
+	minArea						  -1;
+	minTwist					0.05;
+	minDeterminant			   0.001;
+	minFaceWeight				0.05;
+	minVolRatio					0.01;
+	minTriangleTwist			  -1;
+	minVolCollapseRatio			 0.5;
+	nSmoothScale				   4;
+	errorReduction				0.75;
+	relaxed
+	{
+	maxNonOrtho		          	  75;
+	}
+}
+
+debug 0; //orig 0
+mergeTolerance 1e-6;
+
+// ************************************************************************* //
