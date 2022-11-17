@@ -34,7 +34,7 @@ boundaryField
     walls
     {
         type           constantAlphaContactAngle;
-        theta0         45;
+        theta0         45; //orig 45
         limit          gradient;
         value          uniform 0;
     }

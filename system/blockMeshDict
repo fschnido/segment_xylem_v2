@@ -18,24 +18,25 @@ convertToMeters 1e-3;
 //---------------------------------------------------------------------------//
 // Zelleneinstellungen
 
-//Kapillaren
+//Allgemein
 xcells 20;
+zcells 1; 
+
+//Kapillaren
 ycells 100;
-zcells 1;
 
 //Tüpfel    
-xcells2 20;
-ycells2 25;
-zcells2 1;
+ycells2 100; //Check length_capillary/length_pit ratio
+
 
 //---------------------------------------------------------------------------//
 //Geometriedefinition
 
-length_capillary      1; 
-thickness_capillary 0.25; //max 0.5/0.7
+length_capillary      5; // ca. 1
+width_capillary 1; //max 0.5/0.7
 
-length_pit 0.25;
-width_interface_pit 0.1; 
+length_pit 5; //0.25
+width_pit 1; //0.1
 
 
 //---------------------------------------------------------------------------//
@@ -43,7 +44,7 @@ width_interface_pit 0.1;
 
 //Block 1: Kapillare unten
 xPosMin 0;
-xPos #calc "$xPosMin + $thickness_capillary";
+xPos #calc "$xPosMin + $width_capillary";
 
 yPosMin 0;
 yPos #calc "$yPosMin + $length_capillary";
@@ -56,8 +57,8 @@ yPosMin2 #calc "$yPos + 2*$length_pit";
 yPos2    #calc "$yPosMin2 + $length_capillary";
 
 //Block 3: Tüpfel 
-xPosMin3 #calc "0.5*($thickness_capillary - $width_interface_pit)";
-xPos3    #calc "$xPosMin + $xPosMin3 + $width_interface_pit";
+xPosMin3 #calc "0.5*($width_capillary - $width_pit)";
+xPos3    #calc "$xPosMin + $xPosMin3 + $width_pit";
 
 yPos3 #calc "$yPos + $length_pit";
 
@@ -106,10 +107,10 @@ blocks
     hex (8 9 10 11 12 13 14 15) ($xcells $ycells $zcells) simpleGrading (1 1 1)
 
     //Block 3: Tüpfel unten
-    hex (3 2 16 17 7 6 18 19) ($xcells2 $ycells2 $zcells2) simpleGrading (1 1 1)
+    hex (3 2 16 17 7 6 18 19) ($xcells $ycells2 $zcells) simpleGrading (1 1 1)
 
     //Block 4: Tüpfel oben
-    hex (17 16 9 8 19 18 13 12) ($xcells2 $ycells2 $zcells2) simpleGrading (1 1 1)
+    hex (17 16 9 8 19 18 13 12) ($xcells $ycells2 $zcells) simpleGrading (1 1 1)
 );
 
 //---------------------------------------------------------------------------//
