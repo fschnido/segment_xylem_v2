@@ -18,8 +18,8 @@ runApplication blockMesh
 touch blockMesh.foam
 
 #SHM
-runApplication snappyHexMesh -overwrite
-touch SHM.foam
+# runApplication snappyHexMesh -overwrite
+# touch SHM.foam
 
 #Mesh quality
 runApplication checkMesh
