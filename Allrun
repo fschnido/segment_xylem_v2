@@ -15,11 +15,9 @@ tar cfv case_.tar *
 
 #blockMesh
 runApplication blockMesh
-touch blockMesh.foam
 
 #SHM
 # runApplication snappyHexMesh -overwrite
-# touch SHM.foam
 
 #Mesh quality
 runApplication checkMesh
@@ -46,6 +44,10 @@ runApplication $application
 #Generate VTK & FOAM Files
 runApplication foamToVTK -ascii -latestTime
 touch solution.foam
+
+#-----------------------------------------------------------------------------#
+#Generate Logs
+# foamLog log.interFoam
 
 #-----------------------------------------------------------------------------#
 #Data-output

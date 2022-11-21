@@ -12,4 +12,7 @@ rm -r deltaT.txt
 rm -r res.txt
 rm -r Time.txt
 
+rm -rf postProcessing
+rm -rf logs
+
 #------------------------------------------------------------------------------
