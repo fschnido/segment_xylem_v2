@@ -21,23 +21,15 @@ convertToMeters 1e-3;
 //Allgemein
 xcells 20;
 zcells 1; //für 2D
-
-//Kapillaren
-ycells 180;
-
-//Tüpfel    
-ycells2 20; //Check length_capillary/length_pit ratio
-
+ycells 400;
 
 //---------------------------------------------------------------------------//
-//Geometriedefinition
+//Geometriedefinition (als Float!!)
+length_capillary 10.0; // ca. 1
+width_capillary 1.0; //max 0.5/0.7
 
-length_capillary      9; // ca. 1
-width_capillary 1; //max 0.5/0.7
-
-length_pit 1; //0.25
-width_pit 1; //0.1
-
+length_pit 1.0; //0.25
+width_pit 0.5; //0.1
 
 //---------------------------------------------------------------------------//
 //Berechnung Koordinaten
@@ -61,6 +53,18 @@ xPosMin3 #calc "0.5*($width_capillary - $width_pit)";
 xPos3    #calc "$xPosMin + $xPosMin3 + $width_pit";
 
 yPos3 #calc "$yPos + $length_pit";
+
+//---------------------------------------------------------------------------//
+//Berechnung Zellverteilung
+total_length #calc "$length_pit + $length_capillary"; 
+length_ratio #calc "$length_capillary / $total_length";      
+
+
+ycells_capillary #calc "round(0.5 * $length_ratio * $ycells)";
+ycells_pit #calc "round(0.5 * (1-$length_ratio) * $ycells)";
+
+#calc "Info<< $ycells_capillary << endl";
+#calc "Info<< $ycells_pit << endl";
 
 //---------------------------------------------------------------------------//
 vertices
@@ -101,16 +105,16 @@ vertices
 blocks
 (
     //Block 1: Kapillare unten
-    hex (0 1 2 3 4 5 6 7) ($xcells $ycells $zcells) simpleGrading (1 1 1)
+    hex (0 1 2 3 4 5 6 7) ($xcells $ycells_capillary $zcells) simpleGrading (1 1 1)
 
     //Block 2: Kapillare oben
-    hex (8 9 10 11 12 13 14 15) ($xcells $ycells $zcells) simpleGrading (1 1 1)
+    hex (8 9 10 11 12 13 14 15) ($xcells $ycells_capillary $zcells) simpleGrading (1 1 1)
 
     //Block 3: Tüpfel unten
-    hex (3 2 16 17 7 6 18 19) ($xcells $ycells2 $zcells) simpleGrading (1 1 1)
+    hex (3 2 16 17 7 6 18 19) ($xcells $ycells_pit $zcells) simpleGrading (1 1 1)
 
     //Block 4: Tüpfel oben
-    hex (17 16 9 8 19 18 13 12) ($xcells $ycells2 $zcells) simpleGrading (1 1 1)
+    hex (17 16 9 8 19 18 13 12) ($xcells $ycells_pit $zcells) simpleGrading (1 1 1)
 );
 
 //---------------------------------------------------------------------------//
