@@ -8,14 +8,28 @@
 FoamFile
 {
     format      ascii;
-    class       uniformDimensionedVectorField;
-    location    "constant";
-    object      g;
+    class       dictionary;
+    location    "system";
+    object      setFieldsDict;
 }
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
-dimensions      [0 1 -2 0 0 0 0];
-value           (0 -9.81 0);
+defaultFieldValues
+(
+    volScalarFieldValue alpha.water 0 //orig 0
+);
+
+regions
+(
+    boxToCell
+    {
+        box (0 0 -1) (1 5e-4 1); 
+        fieldValues
+        (
+            volScalarFieldValue alpha.water 1
+        );
+    }
+);
 
 
 // ************************************************************************* //

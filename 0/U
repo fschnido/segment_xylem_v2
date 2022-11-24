@@ -34,7 +34,10 @@ boundaryField
 
     walls
     {
-        type            noSlip;
+        // type            noSlip; //change to partialSlip
+
+        type            partialSlip;
+        valueFraction   uniform 0.810;
     }
 
     defaultFaces

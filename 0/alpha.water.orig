@@ -34,7 +34,7 @@ boundaryField
     walls
     {
         type           constantAlphaContactAngle;
-        theta0         45; //orig 45
+        theta0         8; //orig 45, Bohl Elmendorf S.42
         limit          gradient;
         value          uniform 0;
     }
