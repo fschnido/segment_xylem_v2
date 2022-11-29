@@ -16,9 +16,6 @@ tar cfv case_.tar *
 #blockMesh
 runApplication blockMesh
 
-#SHM
-# runApplication snappyHexMesh -overwrite
-
 #Mesh quality
 runApplication checkMesh
 # runApplication renumberMesh 

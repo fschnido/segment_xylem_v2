@@ -23,14 +23,12 @@ zcells 1; //für 2D
 
 //---------------------------------------------------------------------------//
 //Geometriedefinition (als Float!!)
-length_capillary 8.0; // ca. 1
+length_capillary 9.0; // ca. 1
 width_capillary 1.0; //max 0.5/0.7
 
-length_spike 0.4; //0.25
+length_pit 1.0; //0.25
+width_pit 0.7; //0.1
 
-length_pit 0.3;
-width_pit 0.8; //0.1
-width_pit_middle 0.9;
 //---------------------------------------------------------------------------//
 //Berechnung Koordinaten
 
@@ -45,33 +43,23 @@ zPos    0.2;
 zPosMin 0;
 
 //Block 2: Kapillare oben
-yPosMin2 #calc "$yPos + 2*$length_pit + 2*$length_spike";
+yPosMin2 #calc "$yPos + 2*$length_pit";
 yPos2    #calc "$yPosMin2 + $length_capillary";
 
-//Block 3: Tüpfel außen
+//Block 3: Tüpfel 
 xPosMin3 #calc "0.5*($width_capillary - $width_pit)";
 xPos3    #calc "$xPosMin + $xPosMin3 + $width_pit";
 
-yPosMin3 #calc "$yPos + $length_spike";
-yPos3 #calc "$yPos + $length_spike + 2*$length_pit";
-
-//Block 4: Tüpfel mitte
-xPosMin4 #calc "0.5*($width_capillary - $width_pit_middle)";
-xPos4 #calc "$xPosMin4 + $width_pit_middle";
-
-yPos4 #calc "$yPos + $length_spike + $length_pit";
+yPos3 #calc "$yPos + $length_pit";
 
 //---------------------------------------------------------------------------//
 //Berechnung Zellverteilung
-total_length #calc "$length_pit + $length_capillary + $length_spike"; 
+total_length #calc "$length_pit + $length_capillary"; 
+length_ratio #calc "$length_capillary / $total_length";      
 
-length_ratio_capillary #calc "$length_capillary / $total_length";      
-length_ratio_pit #calc "$length_pit / $total_length";
-length_ratio_spike #calc "$length_spike / $total_length";
 
-ycells_capillary #calc "round(0.5 * $length_ratio_capillary * $ycells)";
-ycells_pit #calc "round(0.5 * $length_ratio_pit * $ycells)";
-ycells_spike #calc "round(0.5 * $length_ratio_spike * $ycells)";
+ycells_capillary #calc "round(0.5 * $length_ratio * $ycells)";
+ycells_pit #calc "round(0.5 * (1-$length_ratio) * $ycells)";
 
 #calc "Info<< $ycells_capillary << endl";
 #calc "Info<< $ycells_pit << endl";
@@ -104,22 +92,12 @@ vertices
     ($xPos 			$yPos2  		$zPos) 	    //V14 V-O-R
     ($xPosMin		$yPos2    		$zPos) 	    //V15 V-O-L
 
-//Block 3: Tüpfel außen
-    ($xPosMin3 		$yPosMin3	    $zPosMin) 	//V16 H-U-L
-    ($xPos3			$yPosMin3		$zPosMin) 	//V17 H-U-R
-    ($xPos3 		$yPos3 	        $zPosMin) 	//V18 H-O-R
-    ($xPosMin3		$yPos3   		$zPosMin) 	//V19 H-O-L
-	
-    ($xPosMin3		$yPosMin3		$zPos)   	//V20 V-U-L
-    ($xPos3 		$yPosMin3		$zPos) 	    //V21 V-U-R
-    ($xPos3 		$yPos3  		$zPos) 	    //V22 V-O-R
-    ($xPosMin3		$yPos3    		$zPos) 	    //V23 V-O-L
+//Block 3: Tüpfel
+    ($xPos3 		$yPos3 	        $zPosMin) 	//V16 H-R
+    ($xPosMin3	    $yPos3   		$zPosMin) 	//V17 H-L
+    ($xPos3 		$yPos3  		$zPos) 	    //V18 V-R
+    ($xPosMin3	    $yPos3    		$zPos) 	    //V19 V-L
 
-//Block 4: Tüpfel innen
-    ($xPos4 		$yPos4 	        $zPosMin) 	//V24 H-R
-    ($xPosMin4	    $yPos4   		$zPosMin) 	//V25 H-L
-    ($xPos4 		$yPos4  		$zPos) 	    //V26 V-R
-    ($xPosMin4	    $yPos4    		$zPos) 	    //V27 V-L
 );
 
 //---------------------------------------------------------------------------//
@@ -131,17 +109,11 @@ blocks
     //Block 2: Kapillare oben
     hex (8 9 10 11 12 13 14 15) ($xcells $ycells_capillary $zcells) simpleGrading (1 1 1)
 
-    //Block 3: Spitze unten
-    hex (3 2 17 16 7 6 21 20) ($xcells $ycells_spike $zcells) simpleGrading (1 1 1)
+    //Block 3: Tüpfel unten
+    hex (3 2 16 17 7 6 18 19) ($xcells $ycells_pit $zcells) simpleGrading (1 1 1)
 
-    //Block 4: Spitze oben
-    hex (19 18 9 8 23 22 13 12) ($xcells $ycells_spike $zcells) simpleGrading (1 1 1)
-
-    //Block 5: Tüpfel unten
-    hex (16 17 24 25 20 21 26 27) ($xcells $ycells_pit $zcells) simpleGrading (1 1 1)
-
-    //Block 6: Tüpfel oben
-    hex (25 24 18 19 27 26 22 23) ($xcells $ycells_pit $zcells) simpleGrading (1 1 1)
+    //Block 4: Tüpfel oben
+    hex (17 16 9 8 19 18 13 12) ($xcells $ycells_pit $zcells) simpleGrading (1 1 1)
 );
 
 //---------------------------------------------------------------------------//
@@ -183,17 +155,11 @@ boundary
             (8 12 15 11) //Linke Seite obere Kapillare
             (10 14 13 9) //Rechte Seite obere Kapillare
 
-            (7 3 16 20) //Linke Seite untere Spitze
-            (6 2 17 21) //Rechte Seite untere Spitze
+            (3 7 19 17) //Linke Seite unterer Tüpfel
+            (2 6 18 16) //Rechte Seite unterer Tüpfel
 
-            (12 8 19 23) //Linke Seite obere Spitze
-            (13 9 18 22) //Rechte Seite obere Spitze
-
-            (20 16 25 27) //Linke Seite unterer Tüpfel
-            (21 17 24 26) //Rechte Seite unterer Tüpfel
-
-            (23 19 25 27) //Linke Seite oberer Tüpfel
-            (22 18 24 26) //Rechte Seite oberer Tüpfel
+            (17 19 12 8) //Linke Seite oberer Tüpfel
+            (16 18 13 9) //Rechte Seite oberer Tüpfel
         );
     }
 
@@ -205,20 +171,14 @@ boundary
             (0 3 2 1) //Rückseite untere Kapillare
             (4 5 6 7) //Vorderseite untere Kapillare
 
-            (8 9 10 11 ) //Rückseite obere Kapillare
+            (8 11 10 9) //Rückseite obere Kapillare
             (12 13 14 15) //Vorderseite obere Kapillare
 
-            (2 3 16 17) //Rückseite untere Spitze
-            (6 7 20 21) //Vorderseite untere Spitze
+            (3 2 16 17) //Rückseite unterer Tüpfel
+            (6 7 19 18) //Vorderseite unterer Tüpfel
 
-            (8 9 18 19) //Rückseite obere Spitze
-            (12 13 22 23) //Vorderseite obere Spitze
-
-            (16 17 24 25) //Rückseite unterer Tüpfel
-            (20 21 26 27) //Vorderseite unterer Tüpfel
-
-            (18 19 25 24) //Rückseite oberer Tüpfel
-            (22 23 27 26) //Vorderseite oberer Tüpfel
+            (8 9 16 17) //Rückseite oberer Tüpfel
+            (12 13 18 19) //Vorderseite oberer Tüpfel
         );
     }
 );
