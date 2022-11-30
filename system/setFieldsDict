@@ -16,20 +16,20 @@ FoamFile
 
 defaultFieldValues
 (
-    volScalarFieldValue alpha.water 1 //orig 0
+    volScalarFieldValue alpha.water 0 //orig 0
 );
 
 regions
 (
 
-    // boxToCell
-    // {
-    //     box (0 0 -1) (1 5e-4 1); 
-    //     fieldValues
-    //     (
-    //         volScalarFieldValue alpha.water 0
-    //     );
-    // }
+    boxToCell
+    {
+        box (0 0 -1) (1 0.01 1); 
+        fieldValues
+        (
+            volScalarFieldValue alpha.water 1
+        );
+    }
 
     sphereToCell
     {

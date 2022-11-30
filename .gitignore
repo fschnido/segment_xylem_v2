@@ -1,0 +1,10 @@
+0.*/
+dynamicCode/*
+postProcessing/*
+VTK/*
+log.*
+constant/polyMesh/*
+case_.tar
+*.txt
+*.foam
+alpha.water
