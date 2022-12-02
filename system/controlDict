@@ -53,6 +53,7 @@ maxDeltaT       1; //orig 1
 
 functions
 {
-  #includeFunc residuals
+  //#includeFunc residuals
+  #includeFunc probes
 }
 // ************************************************************************* //

@@ -1,0 +1,85 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+  =========                 |
+  \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
+   \\    /   O peration     | Website:  https://openfoam.org
+    \\  /    A nd           | Version:  9
+     \\/     M anipulation  |
+-------------------------------------------------------------------------------
+Description
+
+
+\*---------------------------------------------------------------------------*/
+
+probes1
+
+//Define Parameters
+xPos 0.5;
+zPos 0;
+
+totalLength 18.0;
+numberOfProbes 10.0;
+
+//Calculate Position and spacing
+spacing #calc "$totalLength/$numberOfProbes";
+
+yPos1 #calc "1*$spacing";
+yPos2 #calc "2*$spacing";
+yPos3 #calc "3*$spacing";
+yPos4 #calc "4*$spacing";
+yPos5 #calc "5*$spacing";
+yPos6 #calc "6*$spacing";
+yPos7 #calc "7*$spacing";
+yPos8 #calc "8*$spacing";
+yPos9 #calc "9*$spacing";
+yPos10 #calc "10*$spacing";
+
+  {
+    type probes;
+    functionObjectLibs ("libsampling.so");
+
+    name Probes;
+
+    outputControl timeStep;
+    outputInterval 1;
+
+    fields
+      (
+        alpha.water
+      );
+
+    probeLocations
+    (
+        //Probe 1
+        ($xPos $yPos1 $zPos)
+
+        //Probe 2
+        ($xPos $yPos2 $zPos)
+
+        //Probe 3
+        ($xPos $yPos3 $zPos)
+
+        //Probe 4
+        ($xPos $yPos4 $zPos)
+
+        //Probe 5
+        ($xPos $yPos5 $zPos)
+
+        //Probe 6
+        ($xPos $yPos6 $zPos)
+
+        //Probe 7
+        ($xPos $yPos7 $zPos)
+
+        //Probe 8
+        ($xPos $yPos8 $zPos)
+
+        //Probe 9
+        ($xPos $yPos9 $zPos)
+
+        //Probe 10
+        ($xPos $yPos10 $zPos)
+    );
+  }
+
+
+// ************************************************************************* //
