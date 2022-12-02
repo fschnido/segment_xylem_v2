@@ -10,10 +10,29 @@ Description
 
 \*---------------------------------------------------------------------------*/
 
-//convertToMeters 1e-3;
+probes1
+{
 
 xPos 0.0005;
 zPos 0;
+
+totalLength 0.018;
+numberOfProbes 10.0;
+
+spacing #calc "($totalLength) / ($numberOfProbes)";
+
+// Info<< "Spacing = " << $spacing << nl << endl;
+
+yPos1 #calc "0*$spacing";
+yPos2 #calc "1*$spacing";
+yPos3 #calc "2*$spacing";
+yPos4 #calc "3*$spacing";
+yPos5 #calc "4*$spacing";
+yPos6 #calc "5*$spacing";
+yPos7 #calc "6*$spacing";
+yPos8 #calc "7*$spacing";
+yPos9 #calc "8*$spacing";
+yPos10 #calc "9*$spacing";
 
     type probes;
     functionObjectLibs ("libsampling.so");
@@ -34,17 +53,28 @@ zPos 0;
 
     probeLocations
      (
-        ($xPos 0e-3    $zPos)   //Probe 1
-        ($xPos 1.8e-3  $zPos)   //Probe 2
-        ($xPos 3.6e-3  $zPos)   //Probe 3
-        ($xPos 5.4e-3  $zPos)   //Probe 4
-        ($xPos 7.2e-3  $zPos)   //Probe 5
-        ($xPos 9e-3    $zPos)   //Probe 6
-        ($xPos 10.8e-3 $zPos)   //Probe 7
-        ($xPos 12.6e-3 $zPos)   //Probe 8
-        ($xPos 14.4e-3 $zPos)   //Probe 9
-        ($xPos 16.2e-3 $zPos)   //Probe 10
+        ($xPos $yPos1  $zPos)   //Probe 1
+        ($xPos $yPos2  $zPos)   //Probe 2
+        ($xPos $yPos3  $zPos)   //Probe 3
+        ($xPos $yPos4  $zPos)   //Probe 4
+        ($xPos $yPos5  $zPos)   //Probe 5
+        ($xPos $yPos6  $zPos)   //Probe 6
+        ($xPos $yPos7  $zPos)   //Probe 7
+        ($xPos $yPos8  $zPos)   //Probe 8
+        ($xPos $yPos9  $zPos)   //Probe 9
+        ($xPos $yPos10 $zPos)   //Probe 10
      );
 
+}
 
+samplingSet1
+{
+  type sets;
+  setFormat raw;
+  interpolationScheme;
+
+  fields (alpha.water);
+
+  
+}
 // ************************************************************************* //
