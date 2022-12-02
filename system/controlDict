@@ -55,5 +55,6 @@ functions
 {
   //#includeFunc residuals
   #includeFunc probes
+  #includeFunc graphUniform
 }
 // ************************************************************************* //
