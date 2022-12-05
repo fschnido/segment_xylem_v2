@@ -10,9 +10,6 @@ Description
 
 \*---------------------------------------------------------------------------*/
 
-probes1
-{
-
 xPos 0.0005;
 zPos 0;
 
@@ -65,16 +62,4 @@ yPos10 #calc "9*$spacing";
         ($xPos $yPos10 $zPos)   //Probe 10
      );
 
-}
-
-samplingSet1
-{
-  type sets;
-  setFormat raw;
-  interpolationScheme;
-
-  fields (alpha.water);
-
-  
-}
 // ************************************************************************* //

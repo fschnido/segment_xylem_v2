@@ -15,4 +15,8 @@ rm -r Time.txt
 rm -rf postProcessing
 rm -rf logs
 
+rm -r bubble_acceleration_data.xlsx
+rm -r bubble_position_data.xlsx
+rm -r bubble_velocity_data.xlsx
+
 #------------------------------------------------------------------------------

@@ -18,7 +18,7 @@ totalLength 0.018;
 
 start           ($xPos 0            $zPos);
 end             ($xPos $totalLength $zPos);
-nPoints         1000;
+nPoints         5000;
 
 fields          (alpha.water);
 
