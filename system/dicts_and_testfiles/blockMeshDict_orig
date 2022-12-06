@@ -13,45 +13,108 @@ FoamFile
 }
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
-// Zelleneinstellungen
-xcells 20;
-ycells 400;
-zcells 1;
-
-//---------------------------------------------------------------------------//
-// Koordinaten
-xPos 1;
-xPosNeg 0;
-
-yPos 20;
-yPosNeg 0;
-
-zPos 1;
-zPosNeg 0;
-
 convertToMeters 1e-3;
 
 //---------------------------------------------------------------------------//
+// Zelleneinstellungen
+xcells 20;
+ycells 400;
+zcells 1; //für 2D
+
+//---------------------------------------------------------------------------//
+//Geometriedefinition (als Float!!)
+length_capillary 7.5; // ca. 1
+width_capillary 1.0; //max 0.5/0.7
+
+length_pit 1.5; //0.25
+width_pit 0.7; //0.1
+
+//---------------------------------------------------------------------------//
+//Berechnung Koordinaten
+
+//Block 1: Kapillare unten
+xPosMin 0;
+xPos #calc "$xPosMin + $width_capillary";
+
+yPosMin 0;
+yPos #calc "$yPosMin + $length_capillary";
+
+zPos    0.2;
+zPosMin 0;
+
+//Block 2: Kapillare oben
+yPosMin2 #calc "$yPos + 2*$length_pit";
+yPos2    #calc "$yPosMin2 + $length_capillary";
+
+//Block 3: Tüpfel 
+xPosMin3 #calc "0.5*($width_capillary - $width_pit)";
+xPos3    #calc "$xPosMin + $xPosMin3 + $width_pit";
+
+yPos3 #calc "$yPos + $length_pit";
+
+//---------------------------------------------------------------------------//
+//Berechnung Zellverteilung
+total_length #calc "$length_pit + $length_capillary"; 
+length_ratio #calc "$length_capillary / $total_length";      
+
+
+ycells_capillary #calc "round(0.5 * $length_ratio * $ycells)";
+ycells_pit #calc "round(0.5 * (1-$length_ratio) * $ycells)";
+
+#calc "Info<< $ycells_capillary << endl";
+#calc "Info<< $ycells_pit << endl";
+
+//---------------------------------------------------------------------------//
+
 vertices
 (
-    ($xPosNeg 		$yPosNeg	    $zPosNeg) 	//1
-    ($xPos			$yPosNeg		$zPosNeg) 	//2
-    ($xPos 			$yPos 	        $zPosNeg) 	//3
-    ($xPosNeg		$yPos   		$zPosNeg) 	//4
-	
-    ($xPosNeg		$yPosNeg		$zPos)   	//5
-    ($xPos 			$yPosNeg		$zPos) 	    //6
-    ($xPos 			$yPos  		    $zPos) 	    //7
-    ($xPosNeg		$yPos    		$zPos) 	    //8
-);
+//H=Hinten, V=Vorne, U=Unten, O=Oben, R=Rechts, L=Links
 
+//Block 1: Kapillare unten
+    ($xPosMin 		$yPosMin	    $zPosMin) 	//V0 H-U-L
+    ($xPos			$yPosMin		$zPosMin) 	//V1 H-U-R
+    ($xPos 			$yPos 	        $zPosMin) 	//V2 H-O-R
+    ($xPosMin		$yPos   		$zPosMin) 	//V3 H-O-L
+	
+    ($xPosMin		$yPosMin		$zPos)   	//V4 V-U-L
+    ($xPos 			$yPosMin		$zPos) 	    //V5 V-U-R
+    ($xPos 			$yPos  		    $zPos) 	    //V6 V-O-R
+    ($xPosMin		$yPos    		$zPos) 	    //V7 V-O-L
+
+//Block 2: Kapillare oben
+    ($xPosMin 		$yPosMin2	    $zPosMin) 	//V8 H-U-L
+    ($xPos			$yPosMin2		$zPosMin) 	//V9 H-U-R
+    ($xPos 			$yPos2 	        $zPosMin) 	//V10 H-O-R
+    ($xPosMin		$yPos2   		$zPosMin) 	//V11 H-O-L
+	
+    ($xPosMin		$yPosMin2		$zPos)   	//V12 V-U-L
+    ($xPos 			$yPosMin2		$zPos) 	    //V13 V-U-R
+    ($xPos 			$yPos2  		$zPos) 	    //V14 V-O-R
+    ($xPosMin		$yPos2    		$zPos) 	    //V15 V-O-L
+
+//Block 3: Tüpfel
+    ($xPos3 		$yPos3 	        $zPosMin) 	//V16 H-R
+    ($xPosMin3	    $yPos3   		$zPosMin) 	//V17 H-L
+    ($xPos3 		$yPos3  		$zPos) 	    //V18 V-R
+    ($xPosMin3	    $yPos3    		$zPos) 	    //V19 V-L
+
+);
 
 //---------------------------------------------------------------------------//
 blocks
 (
-    hex (0 1 2 3 4 5 6 7) ($xcells $ycells $zcells) simpleGrading (1 1 1)
-);
+    //Block 1: Kapillare unten
+    hex (0 1 2 3 4 5 6 7) ($xcells $ycells_capillary $zcells) simpleGrading (1 1 1)
 
+    //Block 2: Kapillare oben
+    hex (8 9 10 11 12 13 14 15) ($xcells $ycells_capillary $zcells) simpleGrading (1 1 1)
+
+    //Block 3: Tüpfel unten
+    hex (3 2 16 17 7 6 18 19) ($xcells $ycells_pit $zcells) simpleGrading (1 1 1)
+
+    //Block 4: Tüpfel oben
+    hex (17 16 9 8 19 18 13 12) ($xcells $ycells_pit $zcells) simpleGrading (1 1 1)
+);
 
 //---------------------------------------------------------------------------//
 edges
@@ -67,33 +130,55 @@ boundary
         type patch;
         faces
         (
-            (1 5 4 0)
+            (1 5 4 0) //Unterseite untere Kapillare
         );
     }
-    atmosphere
+
+    atmosphere //outlet
     {
         type patch;
         faces
         (
-            (3 7 6 2)
+            (11 15 14 10) //Oberseite obere Kapillare
+
         );
     }
+
     walls
     {
         type wall;
         faces
         (
-            (0 4 7 3)
-            (2 6 5 1)
+            (0 4 7 3) //Linke Seite untere Kapillare
+            (2 6 5 1) //Rechte Seite untere Kapillare
+
+            (8 12 15 11) //Linke Seite obere Kapillare
+            (10 14 13 9) //Rechte Seite obere Kapillare
+
+            (3 7 19 17) //Linke Seite unterer Tüpfel
+            (2 6 18 16) //Rechte Seite unterer Tüpfel
+
+            (17 19 12 8) //Linke Seite oberer Tüpfel
+            (16 18 13 9) //Rechte Seite oberer Tüpfel
         );
     }
+
     frontAndBack
     {
         type empty;
         faces
         (
-            (0 3 2 1)
-            (4 5 6 7)
+            (0 3 2 1) //Rückseite untere Kapillare
+            (4 5 6 7) //Vorderseite untere Kapillare
+
+            (8 11 10 9) //Rückseite obere Kapillare
+            (12 13 14 15) //Vorderseite obere Kapillare
+
+            (3 2 16 17) //Rückseite unterer Tüpfel
+            (6 7 19 18) //Vorderseite unterer Tüpfel
+
+            (8 9 16 17) //Rückseite oberer Tüpfel
+            (12 13 18 19) //Vorderseite oberer Tüpfel
         );
     }
 );

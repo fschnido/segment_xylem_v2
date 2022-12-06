@@ -17,9 +17,22 @@ convertToMeters 1e-3;
 
 //---------------------------------------------------------------------------//
 // Zelleneinstellungen
-xcells 20;
-ycells 400;
+xcells 50;
+ycells 600;
 zcells 1; //für 2D
+
+//Grading
+percentXdir1 0.2;
+percentXdir2 0.6; 
+percentXdir3 0.2; 
+
+percentCells1 0.3;
+percentCells2 0.4;
+percentCells3 0.3;
+
+expansion1 16; // = 1/expansion3
+expansion2 1;
+expansion3 0.0625;
 
 //---------------------------------------------------------------------------//
 //Geometriedefinition (als Float!!)
@@ -104,16 +117,62 @@ vertices
 blocks
 (
     //Block 1: Kapillare unten
-    hex (0 1 2 3 4 5 6 7) ($xcells $ycells_capillary $zcells) simpleGrading (1 1 1)
+    hex (0 1 2 3 4 5 6 7) ($xcells $ycells_capillary $zcells) simpleGrading (
+        // x-direction
+        (
+        ($percentXdir1 $percentCells1 $expansion1)        // % x-dir, % cells, expansion 
+        ($percentXdir2 $percentCells2 $expansion2)        // % x-dir, % cells, expansion 
+        ($percentXdir3 $percentCells3 $expansion3)        // % x-dir, % cells, expansion
+        )
+        // y-direction
+        1
+        // z-direction
+        1
+    )
 
     //Block 2: Kapillare oben
-    hex (8 9 10 11 12 13 14 15) ($xcells $ycells_capillary $zcells) simpleGrading (1 1 1)
+    hex (8 9 10 11 12 13 14 15) ($xcells $ycells_capillary $zcells) simpleGrading (
+        
+        // x-direction
+        (
+        ($percentXdir1 $percentCells1 $expansion1)        // % x-dir, % cells, expansion 
+        ($percentXdir2 $percentCells2 $expansion2)        // % x-dir, % cells, expansion 
+        ($percentXdir3 $percentCells3 $expansion3)        // % x-dir, % cells, expansion
+        )
+        // y-direction
+        1
+        // z-direction
+        1
+    )
 
     //Block 3: Tüpfel unten
-    hex (3 2 16 17 7 6 18 19) ($xcells $ycells_pit $zcells) simpleGrading (1 1 1)
+    hex (3 2 16 17 7 6 18 19) ($xcells $ycells_pit $zcells) simpleGrading (
+        
+        // x-direction
+        (
+        ($percentXdir1 $percentCells1 $expansion1)        // % x-dir, % cells, expansion 
+        ($percentXdir2 $percentCells2 $expansion2)        // % x-dir, % cells, expansion 
+        ($percentXdir3 $percentCells3 $expansion3)        // % x-dir, % cells, expansion
+        )
+        // y-direction
+        1
+        // z-direction
+        1    
+    )
 
     //Block 4: Tüpfel oben
-    hex (17 16 9 8 19 18 13 12) ($xcells $ycells_pit $zcells) simpleGrading (1 1 1)
+    hex (17 16 9 8 19 18 13 12) ($xcells $ycells_pit $zcells) simpleGrading (
+        // x-direction
+        (
+        ($percentXdir1 $percentCells1 $expansion1)        // % x-dir, % cells, expansion 
+        ($percentXdir2 $percentCells2 $expansion2)        // % x-dir, % cells, expansion 
+        ($percentXdir3 $percentCells3 $expansion3)        // % x-dir, % cells, expansion
+        )
+        // y-direction
+        1
+        // z-direction
+        1    
+    )
 );
 
 //---------------------------------------------------------------------------//
