@@ -17,8 +17,8 @@ convertToMeters 1e-3;
 
 //---------------------------------------------------------------------------//
 // Zelleneinstellungen
-xcells 50;
-ycells 600;
+xcells 40;
+ycells 400;
 zcells 1; //für 2D
 
 //Grading
@@ -26,13 +26,13 @@ percentXdir1 0.2;
 percentXdir2 0.6; 
 percentXdir3 0.2; 
 
-percentCells1 0.3;
-percentCells2 0.4;
-percentCells3 0.3;
+percentCells1 0.35;
+percentCells2 0.3;
+percentCells3 0.35;
 
-expansion1 16; // = 1/expansion3
+expansion1 4; // = 1/expansion3
 expansion2 1;
-expansion3 0.0625;
+expansion3 0.25; //0.0125
 
 //---------------------------------------------------------------------------//
 //Geometriedefinition (als Float!!)

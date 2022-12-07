@@ -10,6 +10,9 @@ application=$(getApplication)
 rm -r *.tar
 tar cfv case_.tar *
 
+#create dummy foam file
+touch solution.foam
+
 #-----------------------------------------------------------------------------#
 #Meshing
 
@@ -40,7 +43,6 @@ runApplication $application
 #-----------------------------------------------------------------------------#
 #Generate VTK & FOAM Files
 runApplication foamToVTK -ascii -latestTime
-touch solution.foam
 
 #-----------------------------------------------------------------------------#
 #Generate Logs

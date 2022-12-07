@@ -22,13 +22,13 @@ startTime       0;
 
 stopAt          endTime;
 
-endTime         0.5; //max 0.5, 0.2 better, opt 0.05
+endTime         0.2; //max 0.5, 0.2 better, opt 0.05
 
 deltaT          1e-7; //orig 1e-5
 
 writeControl    adjustableRunTime;
 
-writeInterval   0.01; //0.01 good -> try 0.001
+writeInterval   0.001; //0.01 good -> try 0.001
 
 purgeWrite      0;
 
@@ -53,8 +53,8 @@ maxDeltaT       1; //orig 1
 
 functions
 {
-  //#includeFunc residuals
-  #includeFunc probes
+  // #includeFunc residuals
+  // #includeFunc probes
   #includeFunc graphUniform
 }
 // ************************************************************************* //
