@@ -22,6 +22,7 @@ defaultFieldValues
 regions
 (
 
+    //water column for capillary rise
     boxToCell
     {
         box (0 0 -1) (1 0.006 1); 
@@ -31,15 +32,16 @@ regions
         );
     }
 
-    sphereToCell
-    {
-        centre (0 0.003 0); //(0 0.003 0)
-        radius 0.001; //0.0005 
-        fieldValues
-        (
-            volScalarFieldValue alpha.water 0
-        );
-    }
+    //bubble
+    // sphereToCell
+    // {
+    //     centre (0 0.003 0); //(0 0.003 0)
+    //     radius 0.001; //0.0005 
+    //     fieldValues
+    //     (
+    //         volScalarFieldValue alpha.water 0
+    //     );
+    // }
 );
 
 

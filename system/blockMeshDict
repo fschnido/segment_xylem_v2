@@ -40,7 +40,7 @@ length_capillary 7.5; // ca. 1
 width_capillary 1.0; //max 0.5/0.7
 
 length_pit 1.5; //0.25
-width_pit 0.7; //0.1
+width_pit 1.0; //0.7
 
 //---------------------------------------------------------------------------//
 //Berechnung Koordinaten

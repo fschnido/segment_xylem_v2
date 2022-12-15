@@ -7,4 +7,5 @@ constant/polyMesh/*
 case_.tar
 *.txt
 *.foam
+output_*/*
 alpha.water

@@ -37,7 +37,7 @@ boundaryField
         // type            noSlip; //change to partialSlip
 
         type            partialSlip;
-        valueFraction   uniform 0.810;
+        valueFraction   uniform 0.810; // Schlupflänge
     }
 
     defaultFaces
